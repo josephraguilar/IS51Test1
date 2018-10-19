@@ -102,18 +102,20 @@ export class OrdersComponent implements OnInit {
   }
 
   calculateTotal(){
+  
     const total = this.orders.reduce((acc: number, item: IOrder) => {
       acc +=item.quantity * item.price;
       return acc
     }, 0);
     const taxAmount = total * .1;
     const subTotal = total - taxAmount;
-    const validated = this.validate(name, total, taxAmount, subTotal)
+    const validated = this.validate(name, total, taxAmount, subTotal);
     if (!validated) {
       this.showMessage('error-Modal');
     } else {
       this.confirmMessage = this.setSuccessMessage(this.name, total, taxAmount, subTotal)
       this.showMessage('confirm-modal')
+      
     }
   }
 
@@ -129,5 +131,23 @@ export class OrdersComponent implements OnInit {
       return output;
 
   }
+
+  validate(name: string, total: number, taxAmount: number, subTotal: number) {
+    this.errorMessage = ''
+    if(!total) {
+      this.errorMessage = 'Must execute Calculation'
+      }
+    if(name === ' ') {
+        this.errorMessage = 'Name must not be empty!'
+      } else if (name.indexOf(', ') === -1) {
+        this.errorMessage = 'Name must have a comma and a space!';
+      }
+      if(this.errorMessage.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
+      }
+  
 
 }
